@@ -1,0 +1,494 @@
+<!doctype html>
+<html lang="zh-Hant" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>電磁波譜測驗</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700;900&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    body { font-family: 'Noto Sans TC', sans-serif; margin: 0; background-color: #0a0e27; color: white; overflow-x: hidden; }
+
+    .wave-bg {
+      background: linear-gradient(135deg, #0a0e27 0%, #1a1040 30%, #0d2137 60%, #0a0e27 100%);
+      position: relative;
+      overflow: hidden;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .wave-bg::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background:
+        radial-gradient(ellipse 60vw 40vh at 10% 90%, rgba(99, 102, 241, 0.15) 0%, transparent 70%),
+        radial-gradient(ellipse 50vw 30vh at 90% 10%, rgba(236, 72, 153, 0.1) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .spectrum-bar {
+      height: 4px;
+      background: linear-gradient(90deg,
+        #dc2626 0%, #f97316 14%, #eab308 28%, #22c55e 42%,
+        #3b82f6 57%, #6366f1 71%, #a855f7 85%, #ec4899 100%);
+      border-radius: 2px;
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+
+    .drag-item {
+      cursor: grab;
+      user-select: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .drag-item:active { cursor: grabbing; }
+    .sortable-ghost { opacity: 0.3; transform: scale(0.95); }
+    
+    .triangle-corner {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 0;
+      height: 0;
+      border-left: 10px solid transparent;
+      border-bottom: 10px solid var(--triangle-color);
+    }
+
+    .drop-zone-cell {
+      border: 3px solid #e8f170;
+      background: rgba(96, 165, 250, 0.1);
+      height: 60px;
+      position: relative;
+      transition: background-color 0.2s;
+    }
+    .drop-zone-cell.drag-over {
+      background: rgba(232, 241, 112, 0.2);
+    }
+
+    .option-btn {
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 2px solid rgba(148, 163, 184, 0.1);
+      background: rgba(255, 255, 255, 0.03);
+    }
+    .option-btn.correct { border-color: #22c55e; background: rgba(34, 197, 94, 0.15); }
+    .option-btn.wrong { border-color: #ef4444; background: rgba(239, 68, 68, 0.15); }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+    .shake { animation: shake 0.2s ease-in-out 2; }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .fade-in-up { animation: fadeInUp 0.4s ease-out forwards; }
+  </style>
+ </head>
+ <body class="h-full">
+  <div id="app" class="wave-bg w-full h-full overflow-y-auto">
+   
+   <!-- 開始畫面 -->
+   <main id="startScreen" class="relative z-10 flex flex-col items-center justify-center flex-grow px-6 py-12">
+    <div class="text-center fade-in-up max-w-2xl">
+     <div class="mb-8">
+      <svg width="100" height="100" viewBox="0 0 80 80" class="mx-auto">
+       <defs>
+        <linearGradient id="waveGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+         <stop offset="0%" style="stop-color:#ef4444" />
+         <stop offset="50%" style="stop-color:#22c55e" />
+         <stop offset="100%" style="stop-color:#a855f7" />
+        </linearGradient>
+       </defs> 
+       <path d="M10 40 Q20 20 30 40 Q40 60 50 40 Q60 20 70 40" stroke="url(#waveGrad)" stroke-width="5" fill="none" stroke-linecap="round" /> 
+      </svg>
+     </div>
+     <h1 id="mainTitle" onclick="handleTitleClick()" class="text-5xl md:text-6xl font-black mb-4 tracking-tight cursor-default select-none transition-transform active:scale-95">電磁波譜測驗</h1>
+     <div class="spectrum-bar w-64 mx-auto mb-6"></div>
+     <p class="text-slate-400 text-xl md:text-2xl mb-12">波的傳播與電磁波譜</p>
+     <button onclick="startQuiz()" class="inline-flex items-center gap-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xl px-12 py-5 rounded-2xl transition-all hover:scale-105 active:scale-95 shadow-xl shadow-indigo-500/20"> 
+       <i data-lucide="play" fill="currentColor"></i> 
+       <span>開始測驗</span> 
+     </button>
+    </div>
+   </main>
+
+   <!-- 測驗畫面 -->
+   <main id="quizScreen" class="relative z-10 hidden flex-grow px-6 py-8 md:py-12">
+    <div class="max-w-6xl mx-auto w-full">
+     <div class="flex items-center justify-between mb-6">
+      <div class="flex items-center gap-4">
+        <button onclick="confirmExit()" class="flex items-center gap-2 px-3 py-2 rounded-xl text-slate-400 hover:text-white transition-colors">
+          <i data-lucide="arrow-left" class="w-5 h-5"></i>
+          <span class="font-bold hidden sm:inline">退出</span>
+        </button>
+        <div class="bg-white/5 px-4 py-2 rounded-full border border-white/10">
+          <span id="questionCounter" class="text-indigo-400 font-mono font-bold">1 / 10</span>
+        </div>
+      </div>
+      <div id="liveScoreContainer" class="flex items-center gap-3 bg-emerald-500/10 px-4 py-2 rounded-full border border-emerald-500/20">
+        <i data-lucide="star" class="text-emerald-400 w-5 h-5" fill="currentColor"></i>
+        <span id="liveScore" class="text-emerald-400 font-bold">0</span>
+      </div>
+     </div>
+     <div class="w-full h-1.5 rounded-full bg-white/5 mb-10 overflow-hidden">
+      <div id="progressBar" class="progress-fill h-full rounded-full" style="width: 10%; background-color: #6366f1;"></div>
+     </div>
+     <div id="quizContent" class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+       <article class="glass-card rounded-3xl p-8 md:p-10">
+         <span class="text-indigo-400 font-bold text-sm mb-4 block uppercase tracking-widest">問題描述</span>
+         <p id="questionText" class="text-2xl md:text-3xl font-bold leading-tight"></p>
+       </article>
+       <div>
+         <div id="optionsContainer" class="grid grid-cols-1 gap-4"></div>
+         <div class="mt-8 flex justify-end">
+           <button id="nextBtn" onclick="nextQuestion()" class="hidden items-center gap-2 bg-white text-indigo-950 font-black px-10 py-4 rounded-2xl transition-all shadow-lg"> 
+             <span id="nextBtnText">下一題</span> 
+             <i data-lucide="chevron-right"></i> 
+           </button>
+         </div>
+       </div>
+     </div>
+    </div>
+   </main>
+
+   <!-- 排序練習模式 -->
+   <main id="sortModeScreen" class="relative z-10 hidden flex-grow px-2 md:px-6 py-8 md:py-12">
+    <div class="max-w-6xl mx-auto w-full flex flex-col items-center">
+      <div class="flex items-center justify-between w-full mb-8">
+        <button onclick="confirmExit()" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 text-slate-400 hover:text-white transition-colors">
+          <i data-lucide="arrow-left" class="w-5 h-5"></i> <span class="font-bold">返回首頁</span>
+        </button>
+        <div class="px-6 py-2 rounded-full bg-indigo-500/20 border border-indigo-500/30 text-indigo-300 font-bold hidden sm:block">
+          隱藏挑戰：波長排序
+        </div>
+      </div>
+
+      <div class="text-center mb-10 fade-in-up">
+        <h2 class="text-2xl md:text-4xl font-bold mb-2">由大至小排列以下電磁波類別的波長。</h2>
+      </div>
+
+      <div class="w-full overflow-x-auto pb-8 fade-in-up">
+        <div class="min-w-[800px] max-w-5xl mx-auto px-4">
+          <div class="w-full p-2 border-[3px] border-[#e8f170] bg-[#8b5cf6]/20 backdrop-blur-sm mb-8">
+            <div id="sourceList" class="grid grid-cols-7 gap-2 min-h-[50px]"></div>
+          </div>
+          <div id="dropZoneGrid" class="grid grid-cols-7 gap-2 p-2">
+            <div class="drop-zone-cell" data-index="0"></div>
+            <div class="drop-zone-cell" data-index="1"></div>
+            <div class="drop-zone-cell" data-index="2"></div>
+            <div class="drop-zone-cell" data-index="3"></div>
+            <div class="drop-zone-cell" data-index="4"></div>
+            <div class="drop-zone-cell" data-index="5"></div>
+            <div class="drop-zone-cell" data-index="6"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-center gap-4 mt-8">
+        <button id="checkSortBtn" onclick="checkSorting()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-lg px-10 py-4 rounded-2xl transition-all shadow-xl shadow-indigo-600/20">
+          檢查答案
+        </button>
+        <button id="resetSortBtn" onclick="initSortChallenge()" class="bg-white/5 hover:bg-white/10 text-white font-bold text-lg px-10 py-4 rounded-2xl border border-white/10 transition-all">
+          重置
+        </button>
+      </div>
+    </div>
+   </main>
+
+   <!-- 結果畫面 -->
+   <main id="resultScreen" class="relative z-10 hidden flex-grow flex flex-col items-center justify-center px-6 py-12">
+    <div class="glass-card p-10 md:p-16 rounded-[3rem] text-center max-w-2xl w-full fade-in-up flex flex-col items-center">
+     <div class="mb-10 inline-block p-6 rounded-full bg-white/5 border border-white/10">
+       <h2 id="scoreTitle" class="text-slate-400 font-bold text-sm uppercase tracking-widest mb-2">最終得分</h2>
+       <p id="scoreNum" class="text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-pink-500" style="font-family: 'Space Mono', monospace;"></p>
+     </div>
+     <h2 id="resultMsg" class="text-3xl md:text-4xl font-bold mb-4"></h2>
+     <p id="resultDesc" class="text-slate-400 text-lg mb-12 max-w-md"></p>
+     <div class="flex flex-col sm:flex-row gap-4 justify-center w-full">
+       <button id="reviewBtn" onclick="restartQuiz()" class="px-8 py-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 font-bold transition-all">再試一次</button> 
+       <button onclick="restartQuiz()" class="px-8 py-4 rounded-2xl bg-indigo-600 hover:bg-indigo-500 font-bold transition-all">返回首頁</button>
+     </div>
+    </div>
+   </main>
+
+   <!-- 自定義警示視窗 (Exit Modal) -->
+   <div id="exitModal" class="fixed inset-0 z-[100] hidden items-center justify-center px-4">
+     <div class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+     <div class="glass-card relative z-10 max-w-sm w-full p-8 rounded-3xl border-white/20 text-center">
+       <div class="w-16 h-16 bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
+         <i data-lucide="alert-triangle" class="text-red-400 w-8 h-8"></i>
+       </div>
+       <h3 class="text-xl font-bold mb-2">確定要退出嗎？</h3>
+       <p class="text-slate-400 mb-8">目前的進度將會遺失。</p>
+       <div class="flex gap-3">
+         <button onclick="closeExitModal()" class="flex-1 py-3 rounded-xl bg-white/5 border border-white/10 font-bold">取消</button>
+         <button onclick="restartQuiz()" class="flex-1 py-3 rounded-xl bg-red-600 hover:bg-red-500 font-bold">確定退出</button>
+       </div>
+     </div>
+   </div>
+
+  </div>
+
+  <script>
+    const ALL_QUESTIONS = [
+      { q: "當軟彈簧上的波向右傳播時，彈簧上的膠泥會如何運動？", opts: ["向右移動", "向左移動", "上下移動", "靜止不動"], ans: 2 },
+      { q: "關於軟彈簧上波的傳播，當波向右移動並通過彈簧上的一塊膠泥時，這塊膠泥會否隨着波向右移動？", opts: ["會，速度與波速相同", "會，但速度較波速慢", "會，但速度較波速快", "不會"], ans: 3 },
+      { q: "波在傳播的過程中，主要傳播的是什麼？", opts: ["物質", "能量", "介質", "粒子"], ans: 1 },
+      { q: "以下哪一項不會透過波來傳播？", opts: ["能量", "聲音", "光", "物質"], ans: 3 },
+      { q: "波的圖形重複出現的最短距離稱為什麼？", opts: ["振幅", "頻率", "波長", "週期"], ans: 2 },
+      { q: "日常生活中的「八達通」系統是應用了哪一種電磁波？", opts: ["微波", "無線電波", "紅外輻射", "紫外輻射"], ans: 1 },
+      { q: "智能電話的藍牙 (Bluetooth) 功能主要依賴哪一種電磁波運作？", opts: ["無線電波", "X 射線", "紫外輻射", "伽瑪射線"], ans: 0 },
+      { q: "家用的 Wi-Fi 網絡是利用哪一種電磁波來傳送數據？", opts: ["無線電波", "微波", "紅外輻射", "可見光"], ans: 1 },
+      { q: "醫院裡進行 CT 掃描 (電腦斷層掃描) 時，是應用了哪一種射線？", opts: ["伽瑪射線", "紫外輻射", "微波", "X 射線"], ans: 3 },
+      { q: "醫學上，伽瑪射線最主要被應用於以下哪一方面？", opts: ["治療癌症", "孕婦產前檢查", "測量體溫", "視力矯正"], ans: 0 }
+    ];
+
+    const SPECTRUM_ORDER = [
+      { id: 'radio', name: '無線電波', color: '#06b6d4' },
+      { id: 'micro', name: '微波', color: '#4ade80' },
+      { id: 'infra', name: '紅外輻射', color: '#a855f7' },
+      { id: 'visible', name: '可見光', color: '#3b82f6' },
+      { id: 'uv', name: '紫外輻射', color: '#ec4899' },
+      { id: 'xray', name: 'X射線', color: '#f97316' },
+      { id: 'gamma', name: '伽瑪射線', color: '#a3e635' }
+    ];
+
+    let quizQuestions = [];
+    let currentIndex = 0;
+    let score = 0;
+    let clickCount = 0;
+    let clickTimer = null;
+
+    // --- 退出警示邏輯 ---
+    function confirmExit() {
+      const modal = document.getElementById('exitModal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeExitModal() {
+      const modal = document.getElementById('exitModal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    // --- 彩蛋邏輯 ---
+    function handleTitleClick() {
+      clickCount++;
+      const title = document.getElementById('mainTitle');
+      title.classList.add('shake');
+      setTimeout(() => title.classList.remove('shake'), 200);
+      clearTimeout(clickTimer);
+      clickTimer = setTimeout(() => { clickCount = 0; }, 1000);
+      if (clickCount >= 3) {
+        triggerSortMode();
+        clickCount = 0;
+      }
+    }
+
+    function triggerSortMode() {
+      document.getElementById('startScreen').classList.add('hidden');
+      document.getElementById('startScreen').classList.remove('flex');
+      document.getElementById('sortModeScreen').classList.remove('hidden');
+      document.getElementById('sortModeScreen').classList.add('flex');
+      initSortChallenge();
+    }
+
+    function initSortChallenge() {
+      const sourceList = document.getElementById('sourceList');
+      sourceList.innerHTML = '';
+      const cells = document.querySelectorAll('.drop-zone-cell');
+      cells.forEach(cell => {
+        cell.innerHTML = '';
+        cell.classList.remove('outline', 'outline-4', 'outline-emerald-500', 'outline-red-500');
+        if (cell.sortable) cell.sortable.destroy();
+        cell.sortable = new Sortable(cell, {
+          group: 'shared',
+          animation: 150,
+          onAdd: function(evt) {
+            if (evt.to.children.length > 1) {
+              const oldItem = evt.to.children[0] === evt.item ? evt.to.children[1] : evt.to.children[0];
+              sourceList.appendChild(oldItem);
+            }
+          }
+        });
+      });
+      const shuffled = [...SPECTRUM_ORDER].sort(() => Math.random() - 0.5);
+      shuffled.forEach(item => {
+        const div = document.createElement('div');
+        div.dataset.id = item.id;
+        div.className = 'drag-item bg-black text-white flex items-center justify-center text-[15px] font-bold relative w-full h-full shadow-lg';
+        div.innerHTML = `
+          <span class="z-10 tracking-widest pointer-events-none">${item.name}</span>
+          <div class="triangle-corner" style="--triangle-color: ${item.color}"></div>
+        `;
+        sourceList.appendChild(div);
+      });
+      if (sourceList.sortable) sourceList.sortable.destroy();
+      sourceList.sortable = new Sortable(sourceList, { group: 'shared', animation: 150 });
+      lucide.createIcons();
+    }
+
+    function checkSorting() {
+      const cells = document.querySelectorAll('.drop-zone-cell');
+      let filledCount = 0;
+      
+      // 先計算填滿的數量，不要先加上任何框線
+      cells.forEach(cell => {
+        if (cell.querySelector('.drag-item')) {
+          filledCount++;
+        }
+      });
+
+      // 如果沒有全部填滿：震動放置區並顯示提示，中斷後續檢查
+      if (filledCount < 7) {
+        showToast("請填滿所有格子再檢查！");
+        const gridContainer = document.getElementById('dropZoneGrid');
+        gridContainer.classList.add('shake');
+        // 等待動畫結束後移除 class，以便下次能再次觸發
+        setTimeout(() => gridContainer.classList.remove('shake'), 500);
+        return;
+      }
+
+      // 如果全部填滿：檢查答案，但不標示對錯，讓學生不斷試錯
+      let correctCount = 0;
+      cells.forEach((cell, index) => {
+        const item = cell.querySelector('.drag-item');
+        if (item.dataset.id === SPECTRUM_ORDER[index].id) {
+          correctCount++;
+        }
+      });
+
+      if (correctCount === 7) {
+        // 全部答對，直接顯示結果
+        setTimeout(() => showSortResult(correctCount), 300);
+      } else {
+        // 還有錯，震動提示並讓學生繼續嘗試
+        showToast("順序不完全正確，請再試試！");
+        const gridContainer = document.getElementById('dropZoneGrid');
+        gridContainer.classList.add('shake');
+        setTimeout(() => gridContainer.classList.remove('shake'), 500);
+      }
+    }
+
+    function showToast(text) {
+      const msg = document.createElement('div');
+      msg.className = 'fixed top-10 left-1/2 -translate-x-1/2 bg-yellow-500 text-black font-bold px-6 py-3 rounded-full z-[150] shadow-2xl fade-in-up';
+      msg.textContent = text;
+      document.body.appendChild(msg);
+      setTimeout(() => msg.remove(), 2000);
+    }
+
+    function showSortResult(count) {
+      document.getElementById('sortModeScreen').classList.add('hidden');
+      document.getElementById('sortModeScreen').classList.remove('flex');
+      document.getElementById('resultScreen').classList.remove('hidden');
+      document.getElementById('resultScreen').classList.add('flex');
+      document.getElementById('scoreTitle').textContent = "排序正確率";
+      document.getElementById('scoreNum').textContent = `${count} / 7`;
+      document.getElementById('resultMsg').textContent = count === 7 ? "完美排序！" : "再接再厲";
+      document.getElementById('resultDesc').textContent = count === 7 ? "你完全掌握了電磁波譜波長的順序。" : "正確順序為：無線電波 > 微波 > 紅外 > 可見光 > 紫外 > X 射線 > 伽瑪。";
+    }
+
+    function startQuiz() {
+      quizQuestions = [...ALL_QUESTIONS].sort(() => Math.random() - 0.5).slice(0, 10);
+      currentIndex = 0;
+      score = 0;
+      document.getElementById('liveScore').textContent = score;
+      document.getElementById('startScreen').classList.add('hidden');
+      document.getElementById('startScreen').classList.remove('flex');
+      document.getElementById('quizScreen').classList.remove('hidden');
+      showQuestion();
+    }
+
+    function showQuestion() {
+      const q = quizQuestions[currentIndex];
+      document.getElementById('questionCounter').textContent = `${currentIndex + 1} / 10`;
+      document.getElementById('progressBar').style.width = `${(currentIndex + 1) * 10}%`;
+      document.getElementById('questionText').textContent = q.q;
+      const container = document.getElementById('optionsContainer');
+      container.innerHTML = '';
+      q.opts.forEach((opt, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn w-full text-left px-6 py-4 rounded-2xl flex items-center gap-4 fade-in-up';
+        btn.style.animationDelay = `${i * 0.1}s`;
+        btn.innerHTML = `<span class="w-8 h-8 rounded-lg flex items-center justify-center bg-white/10 font-bold">${String.fromCharCode(65+i)}</span> <span>${opt}</span>`;
+        btn.onclick = () => selectAnswer(i, btn);
+        container.appendChild(btn);
+      });
+      document.getElementById('nextBtn').classList.add('hidden');
+      lucide.createIcons();
+    }
+
+    function selectAnswer(idx, btn) {
+      const q = quizQuestions[currentIndex];
+      const btns = document.querySelectorAll('.option-btn');
+      btns.forEach(b => b.disabled = true);
+      if (idx === q.ans) {
+        btn.classList.add('correct');
+        score++;
+        document.getElementById('liveScore').textContent = score;
+      } else {
+        btn.classList.add('wrong');
+        btns[q.ans].classList.add('correct');
+      }
+      document.getElementById('nextBtn').classList.remove('hidden');
+      document.getElementById('nextBtnText').textContent = currentIndex === 9 ? "查看結果" : "下一題";
+    }
+
+    function nextQuestion() {
+      currentIndex++;
+      if (currentIndex < 10) showQuestion();
+      else showFinalResult();
+    }
+
+    function showFinalResult() {
+      document.getElementById('quizScreen').classList.add('hidden');
+      document.getElementById('resultScreen').classList.remove('hidden');
+      document.getElementById('resultScreen').classList.add('flex');
+      document.getElementById('scoreTitle').textContent = "最終得分";
+      document.getElementById('scoreNum').textContent = `${score} / 10`;
+      document.getElementById('resultMsg').textContent = score >= 8 ? "太棒了！" : "繼續努力！";
+      document.getElementById('resultDesc').textContent = "測驗已完成，點擊下方按鈕返回或重新開始。";
+    }
+
+    function restartQuiz() {
+      // 隱藏所有測驗與結果畫面
+      const screens = ['quizScreen', 'sortModeScreen', 'resultScreen', 'exitModal'];
+      screens.forEach(s => {
+        const el = document.getElementById(s);
+        if (el) {
+          el.classList.add('hidden');
+          el.classList.remove('flex');
+        }
+      });
+      
+      // 顯示開始畫面並重新加入 flex 類以確保置中
+      const startEl = document.getElementById('startScreen');
+      startEl.classList.remove('hidden');
+      startEl.classList.add('flex');
+      
+      // 重置測驗變數與分數顯示
+      currentIndex = 0;
+      score = 0;
+      clickCount = 0;
+      document.getElementById('liveScore').textContent = '0';
+    }
+
+    document.addEventListener('DOMContentLoaded', () => lucide.createIcons());
+  </script>
+ </body>
+</html>
