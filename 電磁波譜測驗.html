@@ -135,7 +135,7 @@
           <span class="font-bold hidden sm:inline">退出</span>
         </button>
         <div class="bg-white/5 px-4 py-2 rounded-full border border-white/10">
-          <span id="questionCounter" class="text-indigo-400 font-mono font-bold">1 / 10</span>
+          <span id="questionCounter" class="text-indigo-400 font-mono font-bold">1 / 15</span>
         </div>
       </div>
       <div id="liveScoreContainer" class="flex items-center gap-3 bg-emerald-500/10 px-4 py-2 rounded-full border border-emerald-500/20">
@@ -248,11 +248,31 @@
       { q: "關於軟彈簧上波的傳播，當波向右移動並通過彈簧上的一塊膠泥時，這塊膠泥會否隨着波向右移動？", opts: ["會，速度與波速相同", "會，但速度較波速慢", "會，但速度較波速快", "不會"], ans: 3 },
       { q: "波在傳播的過程中，主要傳播的是什麼？", opts: ["物質", "能量", "介質", "粒子"], ans: 1 },
       { q: "以下哪一項不會透過波來傳播？", opts: ["能量", "聲音", "光", "物質"], ans: 3 },
+      { q: "當不斷搖動軟彈簧產生一連串的波時，波的圖形會發生什麼現象？", opts: ["逐漸消失", "沿着軟彈簧重複出現", "聚集成一點", "變成直線"], ans: 1 },
       { q: "波的圖形重複出現的最短距離稱為什麼？", opts: ["振幅", "頻率", "波長", "週期"], ans: 2 },
       { q: "日常生活中的「八達通」系統是應用了哪一種電磁波？", opts: ["微波", "無線電波", "紅外輻射", "紫外輻射"], ans: 1 },
       { q: "智能電話的藍牙 (Bluetooth) 功能主要依賴哪一種電磁波運作？", opts: ["無線電波", "X 射線", "紫外輻射", "伽瑪射線"], ans: 0 },
+      { q: "電台和電視廣播主要應用以下哪一種電磁波？", opts: ["微波", "紫外輻射", "紅外輻射", "無線電波"], ans: 3 },
       { q: "家用的 Wi-Fi 網絡是利用哪一種電磁波來傳送數據？", opts: ["無線電波", "微波", "紅外輻射", "可見光"], ans: 1 },
+      { q: "全球定位系統 (GPS) 主要應用了哪一種電磁波？", opts: ["微波", "X 射線", "伽瑪射線", "無線電波"], ans: 0 },
+      { q: "雷達系統的運作原理與以下哪一種電磁波最相關？", opts: ["紫外輻射", "紅外輻射", "微波", "伽瑪射線"], ans: 2 },
+      { q: "微波爐能夠加熱食物，主要是因為微波能加熱食物中的哪一種成分？", opts: ["蛋白質", "脂肪", "碳水化合物", "水粒子"], ans: 3 },
+      { q: "比較紅外輻射與紫外輻射，哪一種的波長較長？", opts: ["紅外輻射", "紫外輻射", "兩者波長一樣", "無法比較"], ans: 0 },
+      { q: "關於紅外輻射的發射，以下哪一項是正確的？", opts: ["只有極高溫的物體才會發出", "只有會發光的物體才會發出", "所有物體都會發出", "只有金屬才會發出"], ans: 2 },
+      { q: "物體的溫度與其發出的紅外輻射量有何關係？", opts: ["溫度越高，發出的紅外輻射越少", "溫度越高，發出的紅外輻射越多", "溫度與紅外輻射量沒有關係", "只有在攝氏0度以上才會發出紅外輻射"], ans: 1 },
+      { q: "當物體吸收紅外輻射後，會產生什麼變化？", opts: ["其溫度會下降", "其溫度會上升", "會發出紫外輻射", "體積會縮小"], ans: 1 },
+      { q: "電視機的遙控器主要是應用了哪一種電磁波來傳送訊號？", opts: ["微波", "紫外輻射", "紅外輻射", "無線電波"], ans: 2 },
+      { q: "廚房裡的焗爐和多士爐，主要應用了哪一種輻射來烤熱食物？", opts: ["微波", "紫外輻射", "紅外輻射", "X 射線"], ans: 2 },
+      { q: "測量體溫用的紅外輻射溫度計，是測量人體發出的什麼來運作？", opts: ["X 射線", "紫外輻射", "微波", "紅外輻射"], ans: 3 },
+      { q: "太陽等極高溫的物體會發出大量的哪一種輻射，並可能使我們的皮膚變黑？", opts: ["無線電波", "微波", "紅外輻射", "紫外輻射"], ans: 3 },
+      { q: "熒光物質在吸收了紫外輻射後，會發出什麼？", opts: ["伽瑪射線", "X 射線", "可見光", "紅外輻射"], ans: 2 },
+      { q: "鈔票上的防偽記號通常需要使用哪一種波長的燈光來照射才能看見？", opts: ["紅外輻射", "紫外輻射", "微波", "X 射線"], ans: 1 },
+      { q: "以下哪一項是紫外輻射的常見應用？", opts: ["加熱食物", "行李保安檢查", "消毒", "癌症治療"], ans: 2 },
+      { q: "關於 X 射線的特性，以下哪一項描述是正確的？", opts: ["能量很低，非常安全", "能量很高，能穿透很多物料", "無法穿透人體組織", "波長比無線電波長"], ans: 1 },
       { q: "醫院裡進行 CT 掃描 (電腦斷層掃描) 時，是應用了哪一種射線？", opts: ["伽瑪射線", "紫外輻射", "微波", "X 射線"], ans: 3 },
+      { q: "機場的行李保安檢查系統，主要依賴哪一種射線來透視行李內部？", opts: ["紅外輻射", "無線電波", "X 射線", "紫外輻射"], ans: 2 },
+      { q: "伽瑪射線與 X 射線相比，哪一種的能量較高？", opts: ["伽瑪射線", "X 射線", "兩者能量相同", "取決於發射源的溫度"], ans: 0 },
+      { q: "為什麼伽瑪射線的危險性極高？", opts: ["因為它會令地球暖化", "因為它能深入人體並破壞細胞", "因為它會引發強烈爆炸", "因為它會干擾所有電子設備"], ans: 1 },
       { q: "醫學上，伽瑪射線最主要被應用於以下哪一方面？", opts: ["治療癌症", "孕婦產前檢查", "測量體溫", "視力矯正"], ans: 0 }
     ];
 
@@ -404,7 +424,8 @@
     }
 
     function startQuiz() {
-      quizQuestions = [...ALL_QUESTIONS].sort(() => Math.random() - 0.5).slice(0, 10);
+      // 隨機抽選 15 題
+      quizQuestions = [...ALL_QUESTIONS].sort(() => Math.random() - 0.5).slice(0, 15);
       currentIndex = 0;
       score = 0;
       document.getElementById('liveScore').textContent = score;
@@ -416,42 +437,56 @@
 
     function showQuestion() {
       const q = quizQuestions[currentIndex];
-      document.getElementById('questionCounter').textContent = `${currentIndex + 1} / 10`;
-      document.getElementById('progressBar').style.width = `${(currentIndex + 1) * 10}%`;
+      document.getElementById('questionCounter').textContent = `${currentIndex + 1} / 15`;
+      document.getElementById('progressBar').style.width = `${((currentIndex + 1) / 15) * 100}%`;
       document.getElementById('questionText').textContent = q.q;
       const container = document.getElementById('optionsContainer');
       container.innerHTML = '';
-      q.opts.forEach((opt, i) => {
+      
+      // 將選項與是否正確的狀態綁定後，隨機打亂
+      let optionsWithStatus = q.opts.map((opt, i) => ({
+          text: opt,
+          isCorrect: i === q.ans
+      }));
+      optionsWithStatus.sort(() => Math.random() - 0.5);
+      
+      optionsWithStatus.forEach((optObj, i) => {
         const btn = document.createElement('button');
         btn.className = 'option-btn w-full text-left px-6 py-4 rounded-2xl flex items-center gap-4 fade-in-up';
         btn.style.animationDelay = `${i * 0.1}s`;
-        btn.innerHTML = `<span class="w-8 h-8 rounded-lg flex items-center justify-center bg-white/10 font-bold">${String.fromCharCode(65+i)}</span> <span>${opt}</span>`;
-        btn.onclick = () => selectAnswer(i, btn);
+        btn.innerHTML = `<span class="w-8 h-8 rounded-lg flex items-center justify-center bg-white/10 font-bold">${String.fromCharCode(65+i)}</span> <span>${optObj.text}</span>`;
+        // 點擊時傳入該選項是否正確，以及重組後的選項列表方便標示正解
+        btn.onclick = () => selectAnswer(btn, optObj.isCorrect, optionsWithStatus);
         container.appendChild(btn);
       });
       document.getElementById('nextBtn').classList.add('hidden');
       lucide.createIcons();
     }
 
-    function selectAnswer(idx, btn) {
-      const q = quizQuestions[currentIndex];
+    function selectAnswer(btn, isCorrect, optionsWithStatus) {
       const btns = document.querySelectorAll('.option-btn');
       btns.forEach(b => b.disabled = true);
-      if (idx === q.ans) {
+      
+      if (isCorrect) {
         btn.classList.add('correct');
         score++;
         document.getElementById('liveScore').textContent = score;
       } else {
         btn.classList.add('wrong');
-        btns[q.ans].classList.add('correct');
+        // 答錯時，找出隨機後陣列中的正確解答並標示
+        optionsWithStatus.forEach((opt, idx) => {
+            if(opt.isCorrect) {
+                btns[idx].classList.add('correct');
+            }
+        });
       }
       document.getElementById('nextBtn').classList.remove('hidden');
-      document.getElementById('nextBtnText').textContent = currentIndex === 9 ? "查看結果" : "下一題";
+      document.getElementById('nextBtnText').textContent = currentIndex === 14 ? "查看結果" : "下一題";
     }
 
     function nextQuestion() {
       currentIndex++;
-      if (currentIndex < 10) showQuestion();
+      if (currentIndex < 15) showQuestion();
       else showFinalResult();
     }
 
@@ -460,8 +495,8 @@
       document.getElementById('resultScreen').classList.remove('hidden');
       document.getElementById('resultScreen').classList.add('flex');
       document.getElementById('scoreTitle').textContent = "最終得分";
-      document.getElementById('scoreNum').textContent = `${score} / 10`;
-      document.getElementById('resultMsg').textContent = score >= 8 ? "太棒了！" : "繼續努力！";
+      document.getElementById('scoreNum').textContent = `${score} / 15`;
+      document.getElementById('resultMsg').textContent = score >= 12 ? "太棒了！" : "繼續努力！";
       document.getElementById('resultDesc').textContent = "測驗已完成，點擊下方按鈕返回或重新開始。";
     }
 
