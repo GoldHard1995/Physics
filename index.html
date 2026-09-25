@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#203529">
+  <title>方塊光學實驗室｜選擇實驗</title>
+  <style>
+    :root { font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif; color: #f6f0dc; background: #203529; }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-width: 320px; }
+    .page { min-height: 100vh; padding: 28px clamp(18px, 4vw, 58px) 36px; background-color: #203529; background-image: linear-gradient(#ffffff08 1px, transparent 1px), linear-gradient(90deg, #ffffff08 1px, transparent 1px); background-size: 32px 32px; }
+    .wrap { max-width: 1320px; margin-inline: auto; }
+    .brand { display: flex; align-items: center; gap: 15px; }
+    .brand-mark { width: 49px; height: 49px; flex: none; border: 4px solid #a8d47d; background: #78ad50; box-shadow: 5px 5px 0 #101f16; position: relative; }
+    .brand-mark::before, .brand-mark::after { content: ""; position: absolute; width: 10px; height: 10px; background: #d3ed9c; }
+    .brand-mark::before { top: 6px; left: 6px; }
+    .brand-mark::after { bottom: 5px; right: 5px; background: #315f38; }
+    .brand p { margin: 0 0 3px; color: #b7d997; font-size: 12px; font-weight: 900; letter-spacing: .16em; }
+    .brand h1 { margin: 0; font-size: clamp(20px, 2.4vw, 30px); line-height: 1.25; }
+    .hero { max-width: 850px; margin: clamp(45px, 6vw, 90px) 0 31px; }
+    .tag { display: inline-block; padding: 8px 11px; border: 2px solid #96c16d; color: #d7ecb8; font-size: 12px; font-weight: 900; letter-spacing: .08em; }
+    .hero h2 { margin: 19px 0 13px; font-size: clamp(34px, 5vw, 63px); letter-spacing: .03em; line-height: 1.12; }
+    .hero p { margin: 0; color: #cee0c8; font-size: clamp(15px, 1.6vw, 18px); line-height: 1.75; }
+    .cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+    .lab-card { display: flex; flex-direction: column; min-width: 0; overflow: hidden; border: 5px solid #142a1d; background: #f6f0dc; color: #263b35; text-decoration: none; box-shadow: 9px 9px 0 #102017; transition: transform .15s, box-shadow .15s; }
+    .lab-card:hover { transform: translate(-3px, -3px); box-shadow: 12px 12px 0 #102017; }
+    .lab-card:focus-visible { outline: 4px solid #e98936; outline-offset: 5px; }
+    .card-top { display: flex; align-items: center; justify-content: space-between; gap: 15px; padding: 15px 18px; background: #e5ddc2; border-bottom: 4px solid #263b35; font-size: 12px; font-weight: 900; letter-spacing: .08em; }
+    .card-top span:last-child { color: #3f733f; }
+    .preview { padding: 8px 10px 0; background: #f9f5e7; }
+    .preview svg { display: block; width: 100%; height: auto; max-height: 260px; }
+    .card-info { display: flex; flex-direction: column; gap: 8px; flex: 1; padding: 17px 22px 22px; }
+    .card-info h3 { margin: 0; font-size: clamp(23px, 2.6vw, 32px); }
+    .card-info p { margin: 0; color: #596a60; line-height: 1.6; }
+    .card-action { display: inline-block; align-self: flex-start; margin-top: 7px; padding: 9px 13px; border: 3px solid #1c3729; background: #78ad50; color: #17301e; box-shadow: 3px 3px 0 #1c3729; font-weight: 900; }
+    footer { margin-top: 34px; color: #bed4ba; font-size: 12px; }
+    @media (max-width: 780px) { .cards { grid-template-columns: 1fr; } }
+    @media (max-width: 420px) { .page { padding: 18px 13px 28px; } .lab-card { box-shadow: 5px 5px 0 #102017; } }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="wrap">
+      <header class="brand">
+        <div class="brand-mark" aria-hidden="true"></div>
+        <div><p>BLOCK OPTICS LAB</p><h1>方塊光學實驗室</h1></div>
+      </header>
+
+      <section class="hero" aria-labelledby="main-title">
+        <span class="tag">選擇一個實驗</span>
+        <h2 id="main-title">光線如何反射？<br>鏡子又如何成像？</h2>
+        <p>移動光線或物體，觀察圖像即時變化。每個實驗後都可以進入獨立的小測驗，檢查自己的理解。</p>
+      </section>
+
+      <div class="cards">
+        <a class="lab-card" href="reflection.html" aria-label="進入反射定律模擬器">
+          <div class="card-top"><span>實驗 01</span><span>角度與法線</span></div>
+          <div class="preview">
+            <svg viewBox="0 0 520 255" role="img" aria-label="光線射向平面鏡後反射的預覽圖">
+              <defs><pattern id="reflect-grid" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M32 0H0V32" fill="none" stroke="#dfdfcc"/></pattern></defs>
+              <rect width="520" height="255" fill="#f9f5e7"/><rect width="520" height="255" fill="url(#reflect-grid)"/>
+              <rect x="35" y="196" width="450" height="34" fill="#7aa4ab" stroke="#244e57" stroke-width="4"/><rect x="35" y="196" width="450" height="9" fill="#b4e3e4"/>
+              <path d="M260 36V196" stroke="#627d73" stroke-width="3" stroke-dasharray="9 7"/>
+              <path d="M138 62L260 196" fill="none" stroke="#e98936" stroke-width="6"/>
+              <path d="M260 196L382 62" fill="none" stroke="#42a9be" stroke-width="6"/>
+              <path d="M14 0L-4 -9V-4H-17V4H-4V9Z" transform="translate(194 122) rotate(48)" fill="#e98936" stroke="#743b1c" stroke-width="2"/>
+              <path d="M14 0L-4 -9V-4H-17V4H-4V9Z" transform="translate(328 121) rotate(-48)" fill="#42a9be" stroke="#205a68" stroke-width="2"/>
+              <circle cx="260" cy="196" r="6" fill="#263b35"/>
+            </svg>
+          </div>
+          <div class="card-info"><h3>反射定律</h3><p>拖動入射線，觀察入射角、反射角和法線的關係。</p><span class="card-action">開始實驗 →</span></div>
+        </a>
+
+        <a class="lab-card" href="mirror.html" aria-label="進入平面鏡成像模擬器">
+          <div class="card-top"><span>實驗 02</span><span>物距與像距</span></div>
+          <div class="preview">
+            <svg viewBox="0 0 520 255" role="img" aria-label="鏡前方塊人物與鏡後等距虛像的預覽圖">
+              <defs><pattern id="image-grid" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M32 0H0V32" fill="none" stroke="#dfdfcc"/></pattern></defs>
+              <rect width="520" height="255" fill="#f9f5e7"/><rect width="520" height="255" fill="url(#image-grid)"/>
+              <rect x="253" y="18" width="14" height="210" fill="#8bb9be" stroke="#244e57" stroke-width="3"/>
+              <g fill="#e98936" stroke="#743b1c" stroke-width="3"><rect x="127" y="69" width="44" height="41"/><rect x="118" y="113" width="62" height="70"/><rect x="121" y="184" width="20" height="40"/><rect x="157" y="184" width="20" height="40"/></g>
+              <rect x="122" y="126" width="12" height="12" fill="#fff4d2" stroke="#743b1c" stroke-width="2"/>
+              <g opacity=".47" fill="#42a9be" stroke="#205a68" stroke-width="3"><rect x="349" y="69" width="44" height="41"/><rect x="340" y="113" width="62" height="70"/><rect x="343" y="184" width="20" height="40"/><rect x="379" y="184" width="20" height="40"/></g>
+              <rect x="387" y="126" width="12" height="12" fill="#fff4d2" stroke="#205a68" stroke-width="2"/>
+              <path d="M150 228H260M260 228H370" stroke="#4b6e5b" stroke-width="3" stroke-dasharray="8 5"/>
+            </svg>
+          </div>
+          <div class="card-info"><h3>平面鏡成像</h3><p>移動物體，探索虛像的位置、大小、方向和光線路徑。</p><span class="card-action">開始實驗 →</span></div>
+        </a>
+      </div>
+      <footer>方塊光學實驗室 · 適合平板橫向操作</footer>
+    </div>
+  </main>
+</body>
+</html>

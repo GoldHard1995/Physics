@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#203529">
+  <title>平面鏡成像｜方塊光學實驗室</title>
+  <link rel="stylesheet" href="mirror.css">
+</head>
+<body>
+  <main class="page">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true"></div>
+        <div><p class="eyebrow">BLOCK OPTICS LAB</p><h1>平面鏡成像實驗</h1></div>
+      </div>
+      <nav class="top-links" aria-label="頁面導覽">
+        <a class="chapter" href="index.html">← 返回入口</a>
+        <a class="chapter" href="mirror-quiz.html">進入小測驗 →</a>
+      </nav>
+    </header>
+
+    <div class="content">
+      <section class="panel stage-panel" aria-labelledby="stage-title">
+        <div class="panel-heading"><h2 id="stage-title">鏡前物體與鏡後虛像</h2><span class="live">即時模擬</span></div>
+        <div class="scene-tabs" role="group" aria-label="選擇觀察方式">
+          <button type="button" class="scene-button active" data-scene="person" aria-pressed="true">人物成像</button>
+          <button type="button" class="scene-button" data-scene="candle" aria-pressed="false">眼睛看蠟燭</button>
+        </div>
+        <div class="stage-wrap">
+          <svg id="mirror-diagram" viewBox="0 0 1000 580" role="img" aria-labelledby="diagram-title diagram-desc">
+            <title id="diagram-title">平面鏡成像示意圖</title>
+            <desc id="diagram-desc">橙色人物在平面鏡前，半透明虛像在鏡後。每個入射點都有垂直於鏡面的虛線法線。可上下左右移動物體，切換觀察方式可看見蠟燭發出的光如何經鏡面反射進眼睛。</desc>
+            <defs>
+              <pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse"><path d="M50 0H0V50" fill="none" stroke="#d4dccf" stroke-width="1"/></pattern>
+              <marker id="distance-arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M1 1L9 5L1 9Z" fill="#466350"/></marker>
+              <g id="avatar-shape">
+                <rect x="-28" y="-160" width="56" height="43" fill="#f8d6a8" stroke="#743b1c" stroke-width="4"/>
+                <path d="M-29 -151v-11h58v13h-12v-5h-46" fill="#593b2a" stroke="#593b2a" stroke-width="3"/>
+                <rect x="-14" y="-138" width="6" height="6" fill="#263b35"/><rect x="8" y="-138" width="6" height="6" fill="#263b35"/>
+                <rect x="-35" y="-112" width="70" height="76" fill="#e98936" stroke="#743b1c" stroke-width="4"/>
+                <rect x="-48" y="-106" width="13" height="63" fill="#e98936" stroke="#743b1c" stroke-width="4"/>
+                <rect x="35" y="-106" width="13" height="63" fill="#e98936" stroke="#743b1c" stroke-width="4"/>
+                <rect x="-29" y="-36" width="22" height="36" fill="#526b84" stroke="#263b35" stroke-width="4"/>
+                <rect x="7" y="-36" width="22" height="36" fill="#526b84" stroke="#263b35" stroke-width="4"/>
+                <rect x="-27" y="-92" width="17" height="17" fill="#fff4d2" stroke="#743b1c" stroke-width="3"/>
+                <path d="M-23 -84h9M-19 -89v10" stroke="#e98936" stroke-width="3"/>
+              </g>
+              <g id="candle-shape">
+                <path d="M0 -132l-13 22q0 18 13 18t13 -18z" fill="#f7c537" stroke="#b85e1b" stroke-width="4"/>
+                <path d="M0 -119l-5 11q0 8 5 8t5 -8z" fill="#fff0a0"/>
+                <path d="M0 -92v9" stroke="#303833" stroke-width="4"/>
+                <rect x="-24" y="-83" width="48" height="83" fill="#c65340" stroke="#713529" stroke-width="4"/>
+                <path d="M-18 -73h36M-15 -67h30" stroke="#ef8b64" stroke-width="5"/>
+                <rect x="-32" y="-4" width="64" height="8" fill="#713529"/>
+              </g>
+            </defs>
+            <rect width="1000" height="580" fill="#f9f5e7"/><rect width="1000" height="580" fill="url(#grid)"/>
+            <rect x="510" y="0" width="490" height="580" fill="#d6eeee" opacity=".27"/>
+            <g id="virtual-layer" aria-hidden="true">
+              <line id="virtual-ray-1" stroke="#7460a4" stroke-width="3" stroke-dasharray="11 8"/>
+              <line id="virtual-ray-2" stroke="#7460a4" stroke-width="3" stroke-dasharray="11 8"/>
+            </g>
+            <g aria-hidden="true"><rect x="500" y="56" width="10" height="421" fill="#7aa4ab"/><rect x="502" y="56" width="4" height="421" fill="#b4e3e4"/><line x1="500" y1="56" x2="500" y2="477" stroke="#244e57" stroke-width="3"/><path d="M511 79l20 -18m-20 60 20 -18m-20 60 20 -18m-20 60 20 -18m-20 60 20 -18m-20 60 20 -18m-20 60 20 -18m-20 60 20 -18" stroke="#244e57" stroke-width="3"/></g>
+            <text x="505" y="35" text-anchor="middle" fill="#263b35" font-size="20" font-weight="900">平面鏡</text>
+            <g id="ray-layer" aria-hidden="true">
+              <line id="normal-1" stroke="#4f6b54" stroke-width="3" stroke-dasharray="6 6"/>
+              <line id="normal-2" stroke="#4f6b54" stroke-width="3" stroke-dasharray="6 6"/>
+              <line id="incident-ray-1" stroke="#e98936" stroke-width="4"/>
+              <line id="incident-ray-2" stroke="#e98936" stroke-width="4"/>
+              <line id="reflected-ray-1" stroke="#42a9be" stroke-width="4"/>
+              <line id="reflected-ray-2" stroke="#42a9be" stroke-width="4"/>
+              <path id="incident-arrow-1" d="M17 0L-3 -10V-5H-18V5H-3V10Z" fill="#e98936" stroke="#743b1c" stroke-width="2"/>
+              <path id="incident-arrow-2" d="M17 0L-3 -10V-5H-18V5H-3V10Z" fill="#e98936" stroke="#743b1c" stroke-width="2"/>
+              <path id="reflected-arrow-1" d="M17 0L-3 -10V-5H-18V5H-3V10Z" fill="#42a9be" stroke="#205a68" stroke-width="2"/>
+              <path id="reflected-arrow-2" d="M17 0L-3 -10V-5H-18V5H-3V10Z" fill="#42a9be" stroke="#205a68" stroke-width="2"/>
+            </g>
+            <g id="image-group" opacity=".48" pointer-events="none"><use href="#avatar-shape"/></g>
+            <g id="object-group"><use href="#avatar-shape"/><rect x="-55" y="-170" width="110" height="178" fill="transparent"/></g>
+            <g id="candle-image-group" opacity=".48" pointer-events="none" style="display:none"><use href="#candle-shape"/></g>
+            <g id="candle-object-group" style="display:none"><use href="#candle-shape"/><rect x="-38" y="-136" width="76" height="146" fill="transparent"/></g>
+            <g id="eye-group" style="display:none" aria-label="觀察者的眼睛">
+              <text x="425" y="68" text-anchor="middle" fill="#205a68" font-size="18" font-weight="900">觀察者眼睛</text>
+              <path d="M392 109q33 -31 66 0q-33 31 -66 0z" fill="#fffaf0" stroke="#205a68" stroke-width="5"/>
+              <rect x="418" y="100" width="15" height="18" fill="#205a68"/>
+              <rect x="424" y="103" width="5" height="6" fill="#e5f7f6"/>
+              <rect x="389" y="76" width="72" height="62" fill="transparent"/>
+            </g>
+            <text id="object-name" text-anchor="middle" fill="#9f4d1b" font-size="20" font-weight="900">物體</text>
+            <text id="image-name" text-anchor="middle" fill="#23798d" font-size="20" font-weight="900">虛像</text>
+            <g id="point-labels" fill="#263b35" font-size="17" font-weight="900" aria-hidden="true">
+              <text id="object-a">A</text><text id="object-b">B</text><text id="image-a" fill="#795eaa">A′</text><text id="image-b" fill="#795eaa">B′</text>
+              <circle id="object-b-marker" r="5" fill="#263b35" style="display:none"/>
+              <circle id="image-b-marker" r="5" fill="#795eaa" style="display:none"/>
+            </g>
+            <line id="object-distance-line" y1="530" y2="530" stroke="#466350" stroke-width="3" marker-start="url(#distance-arrow)" marker-end="url(#distance-arrow)"/>
+            <line id="image-distance-line" y1="530" y2="530" stroke="#466350" stroke-width="3" marker-start="url(#distance-arrow)" marker-end="url(#distance-arrow)"/>
+            <text id="object-distance-label" y="565" text-anchor="middle" fill="#263b35" font-size="18" font-weight="900"></text>
+            <text id="image-distance-label" y="565" text-anchor="middle" fill="#263b35" font-size="18" font-weight="900"></text>
+          </svg>
+        </div>
+        <div class="stage-hint"><span class="hint-square" aria-hidden="true"></span><span id="stage-hint-text">上下左右拖動橙色人物，觀察鏡後虛像和光線如何改變。</span></div>
+      </section>
+
+      <aside class="panel control-panel" aria-labelledby="control-title">
+        <div><p class="section-label">實驗控制台</p><h2 id="control-title">移動鏡前物體</h2></div>
+        <p class="intro" id="scene-intro">人物胸前的方塊標記會出現在鏡像的相反一側。物體和虛像始終一樣高、大小相同。</p>
+        <div class="distance-card">
+          <label for="distance-slider"><span>物距</span><strong id="slider-value">4 格</strong></label>
+          <input id="distance-slider" type="range" min="2" max="7" step="1" value="4">
+          <div class="range-ends"><span>靠近鏡面</span><span>遠離鏡面</span></div>
+        </div>
+        <div class="distance-card">
+          <label for="height-slider"><span>垂直位置</span><strong id="height-value">中間</strong></label>
+          <input id="height-slider" type="range" min="330" max="470" step="10" value="440">
+          <div class="range-ends"><span>較高</span><span>較低</span></div>
+        </div>
+        <div class="readouts" aria-live="polite">
+          <div class="readout"><span class="name">物距</span><span class="value" id="object-distance-value">4 格</span></div>
+          <div class="readout image"><span class="name">像距</span><span class="value" id="image-distance-value">4 格</span></div>
+        </div>
+        <label class="switch" for="show-rays"><input id="show-rays" type="checkbox" checked><span>顯示光線、法線及鏡後虛線</span></label>
+        <div class="legend" aria-hidden="true"><span><i class="swatch"></i>入射線</span><span><i class="swatch reflected"></i>反射線</span><span><i class="swatch normal"></i>法線</span><span><i class="swatch virtual"></i>鏡後延長線</span></div>
+        <div class="law"><p><strong>觀察重點：</strong>鏡後的像正立、等大、左右相反，像距等於物距。</p><p>鏡後虛線是反射線的反向延長，光並沒有穿過鏡面到達虛像。</p></div>
+        <button type="button" class="reset" id="reset-button">重設位置</button>
+      </aside>
+    </div>
+    <footer class="footer"><p>方塊光學實驗室 · 平面鏡成像</p><p>拖動物體或調整滑桿，再進入小測驗。</p></footer>
+  </main>
+  <script src="mirror.js"></script>
+</body>
+</html>

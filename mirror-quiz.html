@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#203529">
+  <title>平面鏡成像小測驗｜方塊光學實驗室</title>
+  <link rel="stylesheet" href="quiz.css">
+  <style>
+    .choice-list { display: grid; gap: 10px; }
+    .choice { width: 100%; min-height: 52px; padding: 11px 13px; border: 3px solid #233a2d; background: #fffaf0; color: #263b35; text-align: left; font-weight: 900; cursor: pointer; box-shadow: 3px 3px 0 #c6bda6; }
+    .choice.selected { background: #e4ebce; outline: 3px solid #78ad50; outline-offset: 2px; }
+    .choice:focus-visible, .badge-target:focus-visible { outline: 3px solid #e98936; outline-offset: 3px; }
+    .badge-board { position: relative; min-width: 590px; }
+    .badge-target { position: absolute; top: 49.5%; display: grid; place-items: center; width: 7.5%; min-width: 44px; height: 44px; border: 3px dashed #466350; background: #fffaf0e8; color: #a54e19; font-size: 20px; font-weight: 900; cursor: pointer; }
+    .badge-target.left { left: 63%; }
+    .badge-target.right { left: 74%; }
+    .badge-target.selected { border-style: solid; background: #f8d3a9; }
+    .badge-chip { min-height: 48px; padding: 9px 16px; border: 3px solid #233a2d; background: #f8d3a9; color: #263b35; font-size: 18px; font-weight: 900; cursor: grab; touch-action: none; user-select: none; box-shadow: 3px 3px 0 #a98262; }
+    .badge-chip.selected { outline: 3px solid #e98936; outline-offset: 2px; }
+    .badge-ghost { position: fixed; z-index: 20; pointer-events: none; transform: translate(-50%, -50%); opacity: .9; }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="topbar quiz-page">
+      <div class="brand"><div class="brand-mark" aria-hidden="true"></div><div><p class="eyebrow">BLOCK OPTICS LAB</p><h1>平面鏡成像小測驗</h1></div></div>
+      <nav class="top-links" aria-label="頁面導覽"><a class="chapter" href="mirror.html">← 返回模擬器</a><a class="chapter" href="index.html">入口</a></nav>
+    </header>
+    <section class="panel quiz-panel quiz-page" aria-labelledby="quiz-title">
+      <div class="panel-heading quiz-heading"><h2 id="quiz-title">平面鏡成像 ／ 小測驗</h2><div class="quiz-progress" id="quiz-progress" aria-live="polite"></div></div>
+      <div class="quiz-inner">
+        <p class="quiz-number" id="quiz-number"></p>
+        <h3 id="question-title"></h3>
+        <p class="quiz-prompt" id="question-prompt"></p>
+        <div class="quiz-layout">
+          <div class="quiz-visual" id="quiz-visual"></div>
+          <div class="quiz-response">
+            <div id="quiz-answer"></div>
+            <p class="quiz-feedback" id="quiz-feedback" role="status" aria-live="polite">完成後按「檢查答案」。</p>
+            <div class="quiz-buttons">
+              <button class="quiz-button" type="button" id="quiz-check">檢查答案</button>
+              <button class="quiz-button secondary" type="button" id="quiz-next" hidden>下一題</button>
+              <button class="quiz-button secondary" type="button" id="quiz-restart" hidden>再玩一次</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <footer class="footer quiz-page"><p>方塊光學實驗室 · 平面鏡成像</p><p>觀察圖像，再作答。</p></footer>
+  </main>
+  <script src="mirror-quiz.js"></script>
+</body>
+</html>
