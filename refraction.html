@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#203529">
+  <title>光的折射實驗｜方塊光學實驗室</title>
+  <link rel="stylesheet" href="refraction.css">
+</head>
+<body>
+  <main class="page">
+    <header class="topbar">
+      <div class="brand"><div class="brand-mark" aria-hidden="true"></div><div><p>BLOCK OPTICS LAB</p><h1>光的折射實驗</h1></div></div>
+      <nav class="top-links" aria-label="頁面導覽"><a href="index.html">← 返回入口</a><a href="refraction-quiz.html">進入小測驗 →</a></nav>
+    </header>
+    <section class="panel" aria-labelledby="diagram-title">
+      <div class="panel-heading"><h2 id="diagram-title">光線穿越介質分界</h2><span>即時模擬</span></div>
+      <div class="stage-wrap">
+        <svg id="diagram" viewBox="0 0 800 540" role="img" aria-labelledby="diagram-title diagram-desc">
+          <desc id="diagram-desc">拖動橙色光線的方塊把手可改變入射角。虛線為法線，橙色為入射線，藍色為折射線；發生全內反射時以綠線表示反射線。</desc>
+          <defs><pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M32 0H0V32" fill="none" stroke="#d5ddcb"/></pattern></defs>
+          <rect width="800" height="540" fill="#f8f3e7"/><rect x="0" y="270" width="800" height="270" fill="#d7edf0"/><rect width="800" height="540" fill="url(#grid)"/>
+          <path d="M0 270H800" stroke="#244e57" stroke-width="7"/>
+          <path d="M400 24V516" stroke="#5e7568" stroke-width="3" stroke-dasharray="9 7"/>
+          <text id="source-label" x="24" y="40" class="medium-label">空氣</text><text id="target-label" x="24" y="315" class="medium-label">水</text>
+          <text x="410" y="46" class="small-label">法線</text><text x="24" y="257" class="small-label">介質分界</text>
+          <path id="incident-arc" class="angle-arc orange"/><path id="output-arc" class="angle-arc blue"/>
+          <path id="incident-ray" class="ray orange"/><path id="output-ray" class="ray blue"/><path id="reflection-ray" class="ray green" hidden/>
+          <path id="incident-arrow" class="arrow orange"/><path id="output-arrow" class="arrow blue"/><path id="reflection-arrow" class="arrow green" hidden/>
+          <text id="incident-angle-label" class="angle-label orange-text"></text><text id="output-angle-label" class="angle-label blue-text"></text>
+          <circle cx="400" cy="270" r="8" fill="#263b35"/>
+          <g id="drag-handle" tabindex="0" role="slider" aria-label="拖動入射光線調整入射角" aria-valuemin="0" aria-valuemax="90" aria-valuenow="45">
+            <circle r="25" fill="transparent"/><rect x="-11" y="-11" width="22" height="22" fill="#e98936" stroke="#743b1c" stroke-width="3"/>
+          </g>
+        </svg>
+        <p class="stage-hint">拖動橙色方塊或調整滑桿。角度都從虛線法線量度。</p>
+      </div>
+    </section>
+    <section class="controls" aria-label="實驗控制台">
+      <div class="panel control-panel"><div class="panel-heading"><h2>實驗控制台</h2></div>
+        <div class="control-body">
+          <div class="selectors"><label>入射介質<select id="source-medium"></select></label><label>目的介質<select id="target-medium"></select></label></div>
+          <label class="slider-label" for="angle-slider">入射角 <strong id="slider-value">45°</strong></label>
+          <input id="angle-slider" type="range" min="0" max="90" step="0.1" value="45">
+          <button id="critical-button" type="button" hidden>設為臨界角</button>
+          <div class="readouts"><div>入射折射率 <strong id="source-index"></strong></div><div>目的折射率 <strong id="target-index"></strong></div><div>折射角 <strong id="output-angle"></strong></div><div>臨界角 <strong id="critical-angle"></strong></div></div>
+          <p id="conclusion" class="conclusion" role="status" aria-live="polite"></p>
+          <p class="source-note">折射率為近似值；玻璃以冠狀玻璃為例。計算使用較精確的參考值。</p>
+        </div>
+      </div>
+      <div class="panel comparison"><div class="panel-heading"><h2>固定入射介質和入射角，比較目的介質</h2></div>
+        <div class="comparison-body"><p>折射率越大，折射角越小，光線越偏向法線。比較偏折程度時，入射介質與入射角須相同。</p>
+          <div class="table-wrap"><table><thead><tr><th scope="col">目的介質</th><th scope="col">折射率</th><th scope="col">結果</th><th scope="col">偏折角度</th></tr></thead><tbody id="comparison-body"></tbody></table></div>
+          <p id="comparison-note" class="comparison-note"></p>
+        </div>
+      </div>
+    </section>
+    <footer>方塊光學實驗室 · 光的折射</footer>
+  </main>
+  <script src="refraction.js"></script>
+</body>
+</html>
