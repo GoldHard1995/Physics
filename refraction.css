@@ -2,3 +2,4 @@
 
 .controls > .panel { min-width: 0; }
 svg [hidden] { display: none; }
+#diagram, #diagram * { user-select: none; -webkit-user-select: none; }

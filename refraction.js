@@ -86,7 +86,7 @@ function updateFromPointer(event){
   const local=p.matrixTransform(svg.getScreenCTM().inverse());
   angle=Math.round(Math.max(0,Math.min(90,deg(Math.atan2(400-local.x,270-local.y))))*10)/10;render();
 }
-handle.addEventListener('pointerdown',event=>{dragging=true;handle.setPointerCapture(event.pointerId);updateFromPointer(event);});
+handle.addEventListener('pointerdown',event=>{event.preventDefault();dragging=true;handle.setPointerCapture(event.pointerId);updateFromPointer(event);});
 handle.addEventListener('pointermove',event=>{if(dragging)updateFromPointer(event);});
 handle.addEventListener('pointerup',()=>{dragging=false;});handle.addEventListener('pointercancel',()=>{dragging=false;});
 handle.addEventListener('keydown',event=>{if(event.key==='ArrowLeft'||event.key==='ArrowDown')angle=Math.max(0,angle-1);else if(event.key==='ArrowRight'||event.key==='ArrowUp')angle=Math.min(90,angle+1);else return;event.preventDefault();render();});
