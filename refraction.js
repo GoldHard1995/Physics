@@ -32,7 +32,7 @@ function arrow(id,start,end){
 function arc(id,angleDegrees,below){
   if(angleDegrees<.3){$(id).setAttribute('d','');return;}
   const r=56,y=below?1:-1,start={x:400,y:270+y*r},end={x:400+(below?1:-1)*Math.sin(rad(angleDegrees))*r,y:270+y*Math.cos(rad(angleDegrees))*r};
-  $(id).setAttribute('d',`M${start.x} ${start.y}A${r} ${r} 0 0 ${below?0:1} ${end.x.toFixed(2)} ${end.y.toFixed(2)}`);
+  $(id).setAttribute('d',`M${start.x} ${start.y}A${r} ${r} 0 0 0 ${end.x.toFixed(2)} ${end.y.toFixed(2)}`);
 }
 function render(){
   const source=media.find(m=>m.id===sourceSelect.value),target=media.find(m=>m.id===targetSelect.value);
