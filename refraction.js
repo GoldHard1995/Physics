@@ -48,8 +48,8 @@ function render(){
   const iLabel=$('incident-angle-label'); iLabel.textContent=`入射角 ${neat(angle)}`;
   iLabel.setAttribute('x',angle<15?285:angle>70?258:310);iLabel.setAttribute('y',angle>70?235:205);
   const tir=outcome.kind==='tir';
-  $('output-ray').hidden=tir;$('output-arrow').hidden=tir;$('output-arc').hidden=tir;$('output-angle-label').hidden=tir;
-  $('reflection-ray').hidden=!tir;$('reflection-arrow').hidden=!tir;
+  for(const id of ['output-ray','output-arrow','output-arc','output-angle-label']) $(id).toggleAttribute('hidden',tir);
+  for(const id of ['reflection-ray','reflection-arrow']) $(id).toggleAttribute('hidden',!tir);
   if(tir){
     const end={x:400+Math.sin(rad(angle))*230,y:270-Math.cos(rad(angle))*230};
     line('reflection-ray',origin,end);arrow('reflection-arrow',origin,end);
