@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#203529">
   <title>透鏡成像實驗｜方塊光學實驗室</title>
-  <link rel="stylesheet" href="lens.css?v=1">
+  <link rel="stylesheet" href="lens.css?v=2">
 </head>
 <body>
   <main class="page">
@@ -21,10 +21,6 @@
           <button type="button" class="type-button active" data-lens="convex" aria-pressed="true">凸透鏡</button>
           <button type="button" class="type-button" data-lens="concave" aria-pressed="false">凹透鏡</button>
         </div>
-        <div class="segmented" role="group" aria-label="學習模式">
-          <button type="button" class="mode-button active" data-mode="observe" aria-pressed="true">觀看成像</button>
-          <button type="button" class="mode-button" data-mode="practice" aria-pressed="false">畫光線練習</button>
-        </div>
       </div>
       <div class="stage-wrap">
         <svg id="lens-diagram" viewBox="0 0 1000 560" role="img" aria-labelledby="diagram-title diagram-desc">
@@ -38,7 +34,6 @@
           <path d="M34 300H966" class="axis"/><text x="38" y="286" class="small-label">主軸</text>
           <g id="focus-layer"></g>
           <g id="ray-layer"></g>
-          <g id="practice-layer" hidden></g>
           <g id="lens-shape"></g>
           <g id="object-candle" class="draggable" tabindex="0" role="slider" aria-label="拖動蠟燭調整物距" aria-valuemin="5" aria-valuemax="40" aria-valuenow="30"></g>
           <g id="image-candle"></g>
@@ -61,16 +56,6 @@
             <label><input type="checkbox" data-ray="center" checked> 通過光心</label>
             <label><input type="checkbox" data-ray="parallel" checked> 平行主軸</label>
             <label><input type="checkbox" data-ray="focus" checked> 焦點光線</label>
-          </div>
-          <div id="practice-controls" hidden>
-            <p class="practice-intro">選擇規則，再拖動圖中的兩個方塊，完成光線。</p>
-            <div class="practice-rules" role="group" aria-label="選擇光線規則">
-              <button type="button" class="practice-rule active" data-rule="center">規則 1：光心</button>
-              <button type="button" class="practice-rule" data-rule="parallel">規則 2：平行</button>
-              <button type="button" class="practice-rule" data-rule="focus">規則 3：焦點</button>
-            </div>
-            <div class="practice-actions"><button type="button" id="check-ray">檢查光線</button><button type="button" id="hint-ray">提示</button><button type="button" id="reset-ray">重畫</button></div>
-            <p id="practice-feedback" class="practice-feedback" role="status" aria-live="polite">從蠟燭火焰頂端開始畫線。</p>
           </div>
         </div>
       </div>
@@ -97,6 +82,6 @@
     </section>
     <footer>方塊光學實驗室 · 透鏡成像</footer>
   </main>
-  <script src="lens.js?v=1"></script>
+  <script src="lens.js?v=2"></script>
 </body>
 </html>

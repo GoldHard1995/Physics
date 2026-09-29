@@ -7,14 +7,9 @@ const objectHeight = 12;
 const $ = id => document.getElementById(id);
 
 let lensType = 'convex';
-let mode = 'observe';
 let objectDistance = 30;
 let farObject = false;
 let dragging = null;
-let practiceRule = 'center';
-let practiceLensPoint = {x: lensX, y: 235};
-let practiceOutputPoint = {x: 790, y: 185};
-const completedRules = new Set();
 
 const lensRules = {
   convex: [
@@ -70,7 +65,7 @@ function renderLensAndFoci() {
   $('focus-layer').innerHTML = marks.map(([x, label]) => `<path class="focus-mark" d="M${x} 288V312"/><text class="focus-text" x="${x}" y="335">${label}</text>`).join('');
 }
 
-function makeRay(rule, source, objectX) {
+function makeRay(rule, source) {
   const nearFocus = {x: lensX - focalLength * scale, y: axisY};
   const farFocus = {x: lensX + focalLength * scale, y: axisY};
   let hit;
@@ -97,15 +92,9 @@ function makeRay(rule, source, objectX) {
   return `<path class="ray incoming" d="M${source.x} ${source.y}L${midIn.x} ${midIn.y}L${hit.x} ${hit.y}"/><path class="ray outgoing" d="M${hit.x} ${hit.y}L${midOut.x} ${midOut.y}L${end.x} ${end.y}"/>${virtual}`;
 }
 
-function renderRays(source, objectX, outcome) {
-  const visible = mode === 'observe';
-  $('ray-layer').toggleAttribute('hidden', !visible);
-  if (!visible) {
-    $('ray-layer').innerHTML = '';
-    return;
-  }
+function renderRays(source, outcome) {
   const selected = [...document.querySelectorAll('[data-ray]')].filter(input => input.checked).map(input => input.dataset.ray);
-  let paths = selected.map(rule => makeRay(rule, source, objectX)).join('');
+  let paths = selected.map(rule => makeRay(rule, source)).join('');
   if (outcome.kind === 'virtual') {
     const imageX = lensX - outcome.v * scale;
     const imageTipY = axisY - objectHeight * scale * outcome.m;
@@ -127,10 +116,9 @@ function renderObjects(u, outcome) {
   $('object-candle').setAttribute('transform', `translate(${objectX} ${axisY})`);
   $('object-candle').setAttribute('aria-valuenow', farObject ? '1000' : neat(u));
   $('object-candle').innerHTML = `${candleShape()}<text class="candle-label" x="0" y="28">物體</text>`;
-  const mayShowImage = mode === 'observe' || completedRules.size >= 2;
   $('image-candle').innerHTML = '';
   $('offscreen-note').innerHTML = '';
-  if (!mayShowImage || outcome.kind === 'infinite') return {objectX, source};
+  if (outcome.kind === 'infinite') return {objectX, source};
   const imageX = outcome.kind === 'real' ? lensX + outcome.v * scale : lensX - outcome.v * scale;
   const verticalScale = outcome.upright ? outcome.m : -outcome.m;
   const className = outcome.kind === 'real' ? 'image-real' : 'image-virtual';
@@ -162,12 +150,7 @@ function renderReadouts(u, outcome) {
     $('magnification-value').textContent = `m＝${v}／${neat(u)}＝${neat(outcome.m,2)}`;
     $('screen-note').textContent = outcome.kind === 'real' ? '這是實像，可以用屏幕承接。' : '這是虛像，不能用屏幕承接。';
   }
-  const show = mode === 'observe' || completedRules.size >= 2;
-  $('properties').innerHTML = show ? propertyWords(u,outcome).map(word => `<span class="property">${word}</span>`).join('') : '<span class="property">畫對兩條光線後顯示成像性質</span>';
-  if (!show) {
-    for (const id of ['image-distance','image-height','magnification-value']) $(id).textContent = '待完成光線';
-    $('screen-note').textContent = '先利用其中兩條成像光線找出像的位置。';
-  }
+  $('properties').innerHTML = propertyWords(u,outcome).map(word => `<span class="property">${word}</span>`).join('');
 }
 
 function renderRuleCards() {
@@ -175,37 +158,17 @@ function renderRuleCards() {
   $('rule-cards').innerHTML = lensRules[lensType].map(([title,text]) => `<article class="rule-card"><strong>${title}</strong><p>${text}</p></article>`).join('');
 }
 
-function renderPractice(source) {
-  $('practice-layer').toggleAttribute('hidden', mode !== 'practice');
-  if (mode !== 'practice') return;
-  const completed = [...completedRules].map(rule => makeRay(rule, source, source.x)).join('');
-  const guide = completedRules.has(practiceRule) ? '' : `<path class="practice-line first" d="M${source.x} ${source.y}L${practiceLensPoint.x} ${practiceLensPoint.y}"/><path class="practice-line second" d="M${practiceLensPoint.x} ${practiceLensPoint.y}L${practiceOutputPoint.x} ${practiceOutputPoint.y}"/><circle class="practice-handle" data-handle="lens" tabindex="0" cx="${practiceLensPoint.x}" cy="${practiceLensPoint.y}" r="12"/><circle class="practice-handle output" data-handle="output" tabindex="0" cx="${practiceOutputPoint.x}" cy="${practiceOutputPoint.y}" r="12"/><text class="practice-label" x="${practiceLensPoint.x-50}" y="${practiceLensPoint.y-18}">透鏡點</text><text class="practice-label" x="${practiceOutputPoint.x+18}" y="${practiceOutputPoint.y}">方向</text>`;
-  $('practice-layer').innerHTML = completed + guide;
-}
-
 function render() {
   const u = farObject ? 1000 : objectDistance;
   const outcome = solveLens(u);
   renderLensAndFoci();
-  const {objectX,source} = renderObjects(u,outcome);
-  renderRays(source,objectX,outcome);
-  renderPractice(source);
+  const {source} = renderObjects(u,outcome);
+  renderRays(source,outcome);
   renderReadouts(u,outcome);
   renderRuleCards();
   $('distance-slider').value = farObject ? 40 : objectDistance;
   $('distance-slider').disabled = farObject;
-  $('stage-hint').textContent = mode === 'observe' ? '左右拖動蠟燭，觀察像的位置、方向和大小。' : '選擇一條規則，再拖動兩個方塊完成入射線和折射線。';
-}
-
-function resetPractice(message = '從蠟燭火焰頂端開始畫線。') {
-  const u = farObject ? 1000 : objectDistance;
-  const objectX = farObject ? 80 : lensX - u * scale;
-  const sourceY = axisY - objectHeight * scale;
-  practiceLensPoint = {x:lensX,y:Math.max(80,sourceY+55)};
-  practiceOutputPoint = {x:790,y:Math.max(70,sourceY+15)};
-  $('practice-feedback').className = 'practice-feedback';
-  $('practice-feedback').textContent = message;
-  render();
+  $('stage-hint').textContent = '左右拖動蠟燭，觀察像的位置、方向和大小。';
 }
 
 function pointerPosition(event) {
@@ -213,77 +176,22 @@ function pointerPosition(event) {
   return {x:(event.clientX-bounds.left)*1000/bounds.width,y:(event.clientY-bounds.top)*560/bounds.height};
 }
 
-function pointLineDistance(point,a,b) {
-  const dx=b.x-a.x,dy=b.y-a.y;
-  if (!dx && !dy) return Math.hypot(point.x-a.x,point.y-a.y);
-  return Math.abs(dy*point.x-dx*point.y+b.x*a.y-b.y*a.x)/Math.hypot(dx,dy);
-}
-
-function checkPractice() {
-  if (completedRules.has(practiceRule)) return;
-  const u = farObject ? 1000 : objectDistance;
-  const objectX = farObject ? 80 : lensX-u*scale;
-  const source = {x:objectX,y:axisY-objectHeight*scale};
-  const near={x:lensX-focalLength*scale,y:axisY},far={x:lensX+focalLength*scale,y:axisY};
-  let correct=false;
-  if (practiceRule==='center') correct=Math.abs(practiceLensPoint.y-axisY)<18&&pointLineDistance(practiceOutputPoint,source,{x:lensX,y:axisY})<22;
-  if (practiceRule==='parallel') {
-    const target=lensType==='convex'?far:near;
-    correct=Math.abs(practiceLensPoint.y-source.y)<18&&pointLineDistance(target,practiceLensPoint,practiceOutputPoint)<22;
-  }
-  if (practiceRule==='focus') {
-    const target=lensType==='convex'?near:far;
-    correct=pointLineDistance(target,source,practiceLensPoint)<22&&Math.abs(practiceOutputPoint.y-practiceLensPoint.y)<18;
-  }
-  if (correct) {
-    completedRules.add(practiceRule);
-    $('practice-feedback').className='practice-feedback success';
-    $('practice-feedback').textContent=completedRules.size>=2?'正確！兩條光線已找出像的位置。':'正確！再完成另一條光線便可找出像的位置。';
-    render();
-  } else {
-    $('practice-feedback').className='practice-feedback error';
-    $('practice-feedback').textContent='光線還未符合規則。按「提示」查看應通過的位置。';
-  }
-}
-
-function hintPractice() {
-  const text = lensRules[lensType][{center:0,parallel:1,focus:2}[practiceRule]][1];
-  $('practice-feedback').className='practice-feedback';
-  $('practice-feedback').textContent=`提示：${text}`;
-}
-
 document.querySelectorAll('.type-button').forEach(button=>button.addEventListener('click',()=>{
   lensType=button.dataset.lens;
   document.querySelectorAll('.type-button').forEach(item=>{const active=item===button;item.classList.toggle('active',active);item.setAttribute('aria-pressed',active);});
-  completedRules.clear();resetPractice();
+  render();
 }));
 
-document.querySelectorAll('.mode-button').forEach(button=>button.addEventListener('click',()=>{
-  mode=button.dataset.mode;
-  document.querySelectorAll('.mode-button').forEach(item=>{const active=item===button;item.classList.toggle('active',active);item.setAttribute('aria-pressed',active);});
-  $('practice-controls').hidden=mode!=='practice';
-  document.querySelector('.ray-toggles').hidden=mode==='practice';
-  completedRules.clear();resetPractice();
-}));
-
-$('distance-slider').addEventListener('input',()=>{farObject=false;objectDistance=Number($('distance-slider').value);completedRules.clear();resetPractice();});
+$('distance-slider').addEventListener('input',()=>{farObject=false;objectDistance=Number($('distance-slider').value);render();});
 document.querySelectorAll('.presets button').forEach(button=>button.addEventListener('click',()=>{
   farObject=button.dataset.distance==='far';
   if (!farObject) objectDistance=Number(button.dataset.distance);
-  completedRules.clear();resetPractice();
+  render();
 }));
 document.querySelectorAll('[data-ray]').forEach(input=>input.addEventListener('change',render));
-document.querySelectorAll('.practice-rule').forEach(button=>button.addEventListener('click',()=>{
-  practiceRule=button.dataset.rule;
-  document.querySelectorAll('.practice-rule').forEach(item=>item.classList.toggle('active',item===button));
-  resetPractice();
-}));
-$('check-ray').addEventListener('click',checkPractice);
-$('hint-ray').addEventListener('click',hintPractice);
-$('reset-ray').addEventListener('click',()=>{completedRules.delete(practiceRule);resetPractice();});
 
 $('object-candle').addEventListener('pointerdown',event=>{
-  if (mode!=='observe'||farObject) return;
+  if (farObject) return;
   event.preventDefault();dragging='object';svg.setPointerCapture(event.pointerId);
 });
 $('object-candle').addEventListener('keydown',event=>{
@@ -292,23 +200,12 @@ $('object-candle').addEventListener('keydown',event=>{
   else return;
   event.preventDefault();farObject=false;render();
 });
-svg.addEventListener('pointerdown',event=>{
-  const handle=event.target.closest('[data-handle]');
-  if (!handle||mode!=='practice') return;
-  event.preventDefault();dragging=handle.dataset.handle;svg.setPointerCapture(event.pointerId);
-});
 svg.addEventListener('pointermove',event=>{
   if (!dragging) return;
   const point=pointerPosition(event);
-  if (dragging==='object') {
-    farObject=false;objectDistance=Math.round(Math.max(5,Math.min(40,(lensX-point.x)/scale))*2)/2;completedRules.clear();render();
-  } else if (dragging==='lens') {
-    practiceLensPoint={x:lensX,y:Math.max(55,Math.min(520,point.y))};render();
-  } else if (dragging==='output') {
-    practiceOutputPoint={x:Math.max(540,Math.min(950,point.x)),y:Math.max(40,Math.min(520,point.y))};render();
-  }
+  farObject=false;objectDistance=Math.round(Math.max(5,Math.min(40,(lensX-point.x)/scale))*2)/2;render();
 });
 svg.addEventListener('pointerup',()=>{dragging=null;});
 svg.addEventListener('pointercancel',()=>{dragging=null;});
 
-resetPractice();
+render();
