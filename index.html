@@ -22,7 +22,7 @@
     .tag { display: inline-block; padding: 8px 11px; border: 2px solid #96c16d; color: #d7ecb8; font-size: 12px; font-weight: 900; letter-spacing: .08em; }
     .hero h2 { margin: 19px 0 13px; font-size: clamp(34px, 5vw, 63px); letter-spacing: .03em; line-height: 1.12; }
     .hero p { margin: 0; color: #cee0c8; font-size: clamp(15px, 1.6vw, 18px); line-height: 1.75; }
-    .cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+    .cards { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; }
     .lab-card { display: flex; flex-direction: column; min-width: 0; overflow: hidden; border: 5px solid #142a1d; background: #f6f0dc; color: #263b35; text-decoration: none; box-shadow: 9px 9px 0 #102017; transition: transform .15s, box-shadow .15s; }
     .lab-card:hover { transform: translate(-3px, -3px); box-shadow: 12px 12px 0 #102017; }
     .lab-card:focus-visible { outline: 4px solid #e98936; outline-offset: 5px; }
@@ -50,7 +50,7 @@
 
       <section class="hero" aria-labelledby="main-title">
         <span class="tag">選擇一個實驗</span>
-        <h2 id="main-title">探索反射、成像<br>與光的折射</h2>
+        <h2 id="main-title">探索反射、折射<br>與光學成像</h2>
         <p>移動光線或物體，觀察圖像即時變化。每個實驗後都可以進入獨立的小測驗，檢查自己的理解。</p>
       </section>
 
@@ -103,6 +103,24 @@
             </svg>
           </div>
           <div class="card-info"><h3>光的折射</h3><p>切換兩側介質並移動光線，觀察折射角、臨界角與全內反射。</p><span class="card-action">開始實驗 →</span></div>
+        </a>
+
+        <a class="lab-card" href="lens.html" aria-label="進入透鏡成像模擬器">
+          <div class="card-top"><span>實驗 04</span><span>焦點與放大率</span></div>
+          <div class="preview">
+            <svg viewBox="0 0 520 255" role="img" aria-label="蠟燭經凸透鏡形成倒立實像的預覽圖">
+              <defs><pattern id="lens-card-grid" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M32 0H0V32" fill="none" stroke="#dfdfcc"/></pattern></defs>
+              <rect width="520" height="255" fill="#f9f5e7"/><rect width="520" height="255" fill="url(#lens-card-grid)"/>
+              <path d="M25 142H495" stroke="#334e47" stroke-width="4"/>
+              <path d="M260 18C232 60 232 202 260 238C288 202 288 60 260 18Z" fill="#bfe8e7" fill-opacity=".8" stroke="#257387" stroke-width="4"/>
+              <path d="M260 27V229" stroke="#257387" stroke-width="2"/>
+              <path d="M140 132V76" stroke="#c64c3d" stroke-width="22"/><path d="M140 76C125 61 130 48 140 39C150 48 155 61 140 76Z" fill="#ffc83d" stroke="#a85a20" stroke-width="3"/>
+              <path d="M140 39L260 39L380 142M140 39L260 142L380 245" fill="none" stroke="#e98936" stroke-width="5"/>
+              <path d="M380 152V207" stroke="#42a9be" stroke-width="14"/><path d="M380 207C368 220 372 231 380 238C388 231 392 220 380 207Z" fill="#73cbd7" stroke="#205a68" stroke-width="3"/>
+              <path d="M200 132V152M320 132V152" stroke="#334e47" stroke-width="3"/><text x="200" y="173" text-anchor="middle" font-size="16" font-weight="900" fill="#334e47">F′</text><text x="320" y="173" text-anchor="middle" font-size="16" font-weight="900" fill="#334e47">F</text>
+            </svg>
+          </div>
+          <div class="card-info"><h3>透鏡成像</h3><p>移動蠟燭，學習凸透鏡、凹透鏡的光線規則、成像性質與放大率。</p><span class="card-action">開始實驗 →</span></div>
         </a>
       </div>
       <footer>方塊光學實驗室 · 適合平板橫向操作</footer>

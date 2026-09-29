@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#203529">
+  <title>透鏡成像實驗｜方塊光學實驗室</title>
+  <link rel="stylesheet" href="lens.css?v=1">
+</head>
+<body>
+  <main class="page">
+    <header class="topbar">
+      <div class="brand"><div class="brand-mark" aria-hidden="true"></div><div><p>BLOCK OPTICS LAB</p><h1>透鏡成像實驗</h1></div></div>
+      <nav class="top-links" aria-label="頁面導覽"><a href="index.html">← 返回入口</a><a href="lens-quiz.html">進入小測驗 →</a></nav>
+    </header>
+
+    <section class="panel" aria-labelledby="diagram-title">
+      <div class="panel-heading"><h2 id="diagram-title">移動蠟燭，觀察透鏡成像</h2><span>即時模擬</span></div>
+      <div class="switch-row" aria-label="模擬選項">
+        <div class="segmented" role="group" aria-label="透鏡種類">
+          <button type="button" class="type-button active" data-lens="convex" aria-pressed="true">凸透鏡</button>
+          <button type="button" class="type-button" data-lens="concave" aria-pressed="false">凹透鏡</button>
+        </div>
+        <div class="segmented" role="group" aria-label="學習模式">
+          <button type="button" class="mode-button active" data-mode="observe" aria-pressed="true">觀看成像</button>
+          <button type="button" class="mode-button" data-mode="practice" aria-pressed="false">畫光線練習</button>
+        </div>
+      </div>
+      <div class="stage-wrap">
+        <svg id="lens-diagram" viewBox="0 0 1000 560" role="img" aria-labelledby="diagram-title diagram-desc">
+          <desc id="diagram-desc">透鏡位於中央，蠟燭可沿主軸左右移動。實線顯示實際光線，虛線顯示反向延長線。</desc>
+          <defs>
+            <pattern id="lens-grid" width="25" height="25" patternUnits="userSpaceOnUse"><path d="M25 0H0V25" fill="none" stroke="#d6dfd2"/></pattern>
+            <marker id="ray-arrow-orange" viewBox="0 0 20 20" refX="16" refY="10" markerWidth="9" markerHeight="9" orient="auto"><path d="M0 2L18 10L0 18Z" fill="#e98936"/></marker>
+            <marker id="ray-arrow-blue" viewBox="0 0 20 20" refX="16" refY="10" markerWidth="9" markerHeight="9" orient="auto"><path d="M0 2L18 10L0 18Z" fill="#42a9be"/></marker>
+          </defs>
+          <rect width="1000" height="560" fill="#f8f3e7"/><rect width="1000" height="560" fill="url(#lens-grid)"/>
+          <path d="M34 300H966" class="axis"/><text x="38" y="286" class="small-label">主軸</text>
+          <g id="focus-layer"></g>
+          <g id="ray-layer"></g>
+          <g id="practice-layer" hidden></g>
+          <g id="lens-shape"></g>
+          <g id="object-candle" class="draggable" tabindex="0" role="slider" aria-label="拖動蠟燭調整物距" aria-valuemin="5" aria-valuemax="40" aria-valuenow="30"></g>
+          <g id="image-candle"></g>
+          <g id="offscreen-note"></g>
+        </svg>
+        <p class="stage-hint"><span class="hint-square" aria-hidden="true"></span><span id="stage-hint">左右拖動蠟燭，觀察像的位置、方向和大小。</span></p>
+      </div>
+    </section>
+
+    <section class="workspace">
+      <div class="panel control-panel">
+        <div class="panel-heading"><h2>實驗控制台</h2></div>
+        <div class="control-body">
+          <label class="slider-label" for="distance-slider"><span>物距 u</span><strong id="distance-value">30 cm</strong></label>
+          <input id="distance-slider" type="range" min="5" max="40" step="0.5" value="30">
+          <div class="presets" role="group" aria-label="物距快捷設定">
+            <button type="button" data-distance="5">0.5f</button><button type="button" data-distance="10">f</button><button type="button" data-distance="15">1.5f</button><button type="button" data-distance="20">2f</button><button type="button" data-distance="30">3f</button><button type="button" data-distance="far">遠處</button>
+          </div>
+          <div class="ray-toggles" aria-label="顯示光線">
+            <label><input type="checkbox" data-ray="center" checked> 通過光心</label>
+            <label><input type="checkbox" data-ray="parallel" checked> 平行主軸</label>
+            <label><input type="checkbox" data-ray="focus" checked> 焦點光線</label>
+          </div>
+          <div id="practice-controls" hidden>
+            <p class="practice-intro">選擇規則，再拖動圖中的兩個方塊，完成光線。</p>
+            <div class="practice-rules" role="group" aria-label="選擇光線規則">
+              <button type="button" class="practice-rule active" data-rule="center">規則 1：光心</button>
+              <button type="button" class="practice-rule" data-rule="parallel">規則 2：平行</button>
+              <button type="button" class="practice-rule" data-rule="focus">規則 3：焦點</button>
+            </div>
+            <div class="practice-actions"><button type="button" id="check-ray">檢查光線</button><button type="button" id="hint-ray">提示</button><button type="button" id="reset-ray">重畫</button></div>
+            <p id="practice-feedback" class="practice-feedback" role="status" aria-live="polite">從蠟燭火焰頂端開始畫線。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel result-panel">
+        <div class="panel-heading"><h2>成像結果</h2></div>
+        <div class="result-body">
+          <div class="readouts">
+            <div><span>物距 u</span><strong id="object-distance">30 cm</strong></div>
+            <div><span>像距 v</span><strong id="image-distance">15 cm</strong></div>
+            <div><span>物高</span><strong>12 cm</strong></div>
+            <div><span>像高</span><strong id="image-height">6 cm</strong></div>
+          </div>
+          <div class="magnification"><span>放大率</span><strong id="magnification-value">m＝15／30＝0.5</strong></div>
+          <div class="properties" id="properties" aria-live="polite"></div>
+          <p id="screen-note" class="screen-note"></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel rules-panel" aria-labelledby="rules-title">
+      <div class="panel-heading"><h2 id="rules-title">三條主要光線</h2><span id="rules-lens-name">凸透鏡</span></div>
+      <div class="rule-cards" id="rule-cards"></div>
+    </section>
+    <footer>方塊光學實驗室 · 透鏡成像</footer>
+  </main>
+  <script src="lens.js?v=1"></script>
+</body>
+</html>
