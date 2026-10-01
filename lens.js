@@ -140,14 +140,14 @@ function renderReadouts(u, outcome) {
   if (outcome.kind === 'infinite') {
     $('image-distance').textContent = '無限遠';
     $('image-height').textContent = '不適用';
-    $('magnification-value').textContent = '像在無限遠，m 不適用';
+    $('magnification-value').textContent = '像在無限遠，放大率大小不適用';
     $('screen-note').textContent = '物體位於主焦點，折射光互相平行，不形成有限位置的像。';
   } else {
     const v = neat(outcome.v);
     const imageHeight = neat(objectHeight * outcome.m);
     $('image-distance').textContent = `${v} cm`;
     $('image-height').textContent = `${imageHeight} cm`;
-    $('magnification-value').textContent = `m＝${v}／${neat(u)}＝${neat(outcome.m,2)}`;
+    $('magnification-value').textContent = `｜m｜＝${imageHeight}／${neat(objectHeight)}＝${neat(outcome.m,2)}`;
     $('screen-note').textContent = outcome.kind === 'real' ? '這是實像，可以用屏幕承接。' : '這是虛像，不能用屏幕承接。';
   }
   $('properties').innerHTML = propertyWords(u,outcome).map(word => `<span class="property">${word}</span>`).join('');
