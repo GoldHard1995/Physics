@@ -145,9 +145,11 @@ function renderReadouts(u, outcome) {
   } else {
     const v = neat(outcome.v);
     const imageHeight = neat(objectHeight * outcome.m);
+    const shownMagnification = neat(outcome.m, 2);
+    const equalsSign = Math.abs(Number(imageHeight) / objectHeight - Number(shownMagnification)) < 1e-10 ? '＝' : '≈';
     $('image-distance').textContent = `${v} cm`;
     $('image-height').textContent = `${imageHeight} cm`;
-    $('magnification-value').textContent = `｜m｜＝${imageHeight}／${neat(objectHeight)}＝${neat(outcome.m,2)}`;
+    $('magnification-value').textContent = `｜m｜＝${imageHeight}／${neat(objectHeight)}${equalsSign}${shownMagnification}`;
     $('screen-note').textContent = outcome.kind === 'real' ? '這是實像，可以用屏幕承接。' : '這是虛像，不能用屏幕承接。';
   }
   $('properties').innerHTML = propertyWords(u,outcome).map(word => `<span class="property">${word}</span>`).join('');
