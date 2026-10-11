@@ -72,6 +72,9 @@ h1 { margin: 0; font-size: clamp(21px, 2.5vw, 32px); line-height: 1.25; letter-s
 .law { padding: 14px 16px; border-left: 6px solid var(--grass-dark); background: #e4ebce; }
 .law p { margin: 0; line-height: 1.6; font-size: 13px; }
 .law p + p { margin-top: 6px; }
+.image-properties { margin: 0 18px 14px; padding: 14px; border: 3px solid var(--border); background: #e4ebce; }
+.image-properties ul { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 0; padding: 0; list-style: none; }
+.image-properties li { padding: 7px 10px; border: 2px solid var(--border); background: #fffaf0; font-weight: 900; }
 .reset { margin-top: auto; min-height: 46px; border: 3px solid #1c3729; background: var(--grass); color: #15301e; font-weight: 900; box-shadow: 4px 4px 0 #1c3729; }
 .reset:hover { background: #8cc667; }
 .reset:active { transform: translate(3px, 3px); box-shadow: 1px 1px 0 #1c3729; }
