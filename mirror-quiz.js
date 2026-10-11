@@ -3,7 +3,8 @@ const questions = [
   { title: '左右相反', prompt: '鏡前人物胸前左側有星星。把星星放在鏡像人物胸前的正確一側。', kind: 'badge', answer: 'right', explanation: '鏡像左右相反；物體左側的星星，會出現在鏡像的右側。' },
   { title: '物體與像的大小', prompt: '把物體移遠一點，鏡中的像會變大、變小，還是一樣大？', kind: 'choice', scene: 'blank', options: [['像與物體一樣大', 'same'], ['像變小', 'smaller'], ['像變大', 'larger']], answer: 'same', explanation: '平面鏡中的像與物體大小相同，移動物體也不會改變這個關係。' },
   { title: '物距與像距', prompt: '圖中物體與鏡面相距 3 格。像與鏡面相距幾格？', kind: 'number', scene: 'distance', answer: 3, explanation: '平面鏡成像時，像距等於物距，所以像距是 3 格。' },
-  { title: '虛像能否投到屏幕？', prompt: '鏡後看見的像，能否投射到屏幕上？', kind: 'choice', scene: 'rays', options: [['可以，鏡後有真正的光線交會', 'real'], ['不可以，只有反射線的延長線在鏡後交會', 'virtual'], ['物體靠近鏡面時才可以', 'near']], answer: 'virtual', explanation: '鏡後只有反射線的虛線延長線相交，沒有真正的光線在該處交會，因此是不能投射到屏幕上的虛像。' }
+  { title: '虛像能否投到屏幕？', prompt: '鏡後看見的像，能否投射到屏幕上？', kind: 'choice', scene: 'rays', options: [['可以，鏡後有真正的光線交會', 'real'], ['不可以，只有反射線的延長線在鏡後交會', 'virtual'], ['物體靠近鏡面時才可以', 'near']], answer: 'virtual', explanation: '鏡後只有反射線的虛線延長線相交，沒有真正的光線在該處交會，因此是不能投射到屏幕上的虛像。' },
+  { title: '平面鏡成像的五項性質', prompt: '下列哪一組完整描述圖中平面鏡所成的像？', kind: 'choice', scene: 'rays', options: [['A．正立、橫向倒置、與物體大小相等、像距等於物距、虛像', 'all-correct'], ['B．倒立、橫向倒置、與物體大小相等、像距等於物距、虛像', 'inverted'], ['C．正立、橫向倒置、比物體小、像距小於物距、虛像', 'smaller'], ['D．正立、橫向倒置、與物體大小相等、像距等於物距、實像', 'real-image']], answer: 'all-correct', explanation: '平面鏡成像的五項性質是：正立、橫向倒置、與物體大小相等、像距等於物距，以及虛像。' }
 ];
 
 let questionIndex = 0;
@@ -56,9 +57,9 @@ function diagram(scene) {
 }
 
 function updateProgress() {
-  const count = Math.min(questionIndex + (solved ? 1 : 0), 5);
-  document.querySelector('#quiz-progress').innerHTML = `<span>${count} ／ 5 完成</span>` +
-    Array.from({ length: 5 }, (_, index) => `<span class="progress-block ${index < count ? 'done' : index === questionIndex ? 'current' : ''}" aria-hidden="true"></span>`).join('');
+  const count = Math.min(questionIndex + (solved ? 1 : 0), questions.length);
+  document.querySelector('#quiz-progress').innerHTML = `<span>${count} ／ ${questions.length} 完成</span>` +
+    Array.from({ length: questions.length }, (_, index) => `<span class="progress-block ${index < count ? 'done' : index === questionIndex ? 'current' : ''}" aria-hidden="true"></span>`).join('');
 }
 
 function feedback(message, kind = '') {
@@ -119,7 +120,7 @@ function showQuestion() {
   selectedChoice = null;
   selectedSide = null;
   updateProgress();
-  document.querySelector('#quiz-number').textContent = `第 ${questionIndex + 1} 題 ／ 共 5 題`;
+  document.querySelector('#quiz-number').textContent = `第 ${questionIndex + 1} 題 ／ 共 ${questions.length} 題`;
   document.querySelector('#question-title').textContent = question.title;
   document.querySelector('#question-prompt').textContent = question.prompt;
   document.querySelector('#quiz-check').hidden = false;
@@ -153,7 +154,7 @@ function markSolved(explanation) {
   feedback(`答對了！${explanation}`, 'success');
   document.querySelector('#quiz-check').hidden = true;
   document.querySelector('#quiz-next').hidden = false;
-  document.querySelector('#quiz-next').textContent = questionIndex === 4 ? '查看結果' : '下一題';
+  document.querySelector('#quiz-next').textContent = questionIndex === questions.length - 1 ? '查看結果' : '下一題';
   updateProgress();
 }
 
@@ -183,14 +184,14 @@ document.querySelector('#quiz-check').addEventListener('click', checkAnswer);
 document.querySelector('#quiz-next').addEventListener('click', () => {
   if (!solved) return;
   questionIndex++;
-  if (questionIndex < 5) {
+  if (questionIndex < questions.length) {
     showQuestion();
   } else {
     updateProgress();
     document.querySelector('#quiz-number').textContent = '全部完成';
     document.querySelector('#question-title').textContent = '成功完成成像挑戰！';
     document.querySelector('#question-prompt').textContent = '你已辨認平面鏡成像的五項性質。';
-    document.querySelector('#quiz-visual').innerHTML = '<div class="quiz-complete"><div><span>✓</span>5 題完成</div></div>';
+    document.querySelector('#quiz-visual').innerHTML = `<div class="quiz-complete"><div><span>✓</span>${questions.length} 題完成</div></div>`;
     document.querySelector('#quiz-answer').innerHTML = '<p class="quiz-instruction">再回到模擬器移動物體，看看五項性質是否每次都成立。</p>';
     document.querySelector('#quiz-check').hidden = true;
     document.querySelector('#quiz-next').hidden = true;
