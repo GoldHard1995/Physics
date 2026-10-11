@@ -41,7 +41,7 @@ function setPoint(id, x, y) {
 
 function render(nextDistance, nextY = objectY) {
   distance = Math.max(2, Math.min(7, nextDistance));
-  objectY = Math.max(330, Math.min(470, nextY));
+  objectY = Math.max(230, Math.min(470, nextY));
   const objectX = mirrorX - distance * gridSize;
   const imageX = mirrorX + distance * gridSize;
   const objectTop = objectY - 160;
