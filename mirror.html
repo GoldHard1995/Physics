@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#203529">
   <title>平面鏡成像｜方塊光學實驗室</title>
-  <link rel="stylesheet" href="mirror.css">
+  <link rel="stylesheet" href="mirror.css?v=2">
 </head>
 <body>
   <main class="page">
@@ -99,6 +99,10 @@
             <text id="image-distance-label" y="565" text-anchor="middle" fill="#263b35" font-size="18" font-weight="900"></text>
           </svg>
         </div>
+        <div class="image-properties" aria-label="平面鏡成像的性質">
+          <strong>像的性質</strong>
+          <ul><li>正立</li><li>橫向倒置</li><li>與物體大小相等</li><li>像距等於物距</li><li>虛像</li></ul>
+        </div>
         <div class="stage-hint"><span class="hint-square" aria-hidden="true"></span><span id="stage-hint-text">上下左右拖動橙色人物，觀察鏡後虛像和光線如何改變。</span></div>
       </section>
 
@@ -112,7 +116,7 @@
         </div>
         <div class="distance-card">
           <label for="height-slider"><span>垂直位置</span><strong id="height-value">中間</strong></label>
-          <input id="height-slider" type="range" min="330" max="470" step="10" value="440">
+          <input id="height-slider" type="range" min="230" max="470" step="10" value="440">
           <div class="range-ends"><span>較高</span><span>較低</span></div>
         </div>
         <div class="readouts" aria-live="polite">
@@ -127,6 +131,6 @@
     </div>
     <footer class="footer"><p>方塊光學實驗室 · 平面鏡成像</p><p>拖動物體或調整滑桿，再進入小測驗。</p></footer>
   </main>
-  <script src="mirror.js"></script>
+  <script src="mirror.js?v=2"></script>
 </body>
 </html>
